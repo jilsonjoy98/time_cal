@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
+
 function App() {
   const [entries, setEntries] = useState([{ hours: 0, minutes: 0, days: 1 }]);
 
