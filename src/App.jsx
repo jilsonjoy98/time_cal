@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 function App() {
@@ -33,87 +33,106 @@ function App() {
   const totalHours = Math.floor(safeMinutes / 60);
   const remainingMinutes = safeMinutes % 60;
 
+  useEffect(() => {
+    const handleContextMenu = (e) => e.preventDefault();
+    const handleKeyDown = (e) => {
+      if (
+        e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) || // Ctrl+Shift+I/J/C
+        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
   return (
     <>
       <Analytics />
 
-        <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-          <div className="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6">
-            <h1 className="text-2xl font-semibold text-center mb-6">
-              Time Calculator
-            </h1>
-  
-            <div className="grid grid-cols-5 gap-3 mb-3 font-medium">
-              <p>Hours</p>
-              <p>Minutes</p>
-              <p>Days</p>
-              <p>Type</p>
-              <p></p>
-            </div>
-  
-            {entries.map((item, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-5 gap-3 items-center mb-3"
-              >
-                <input
-                  type="number"
-                  min={0}
-                  value={item.hours}
-                  onChange={(e) => handleChange(index, "hours", e.target.value)}
-                  className="border rounded-lg px-3 py-2"
-                />
-  
-                <input
-                  type="number"
-                  min={0}
-                  value={item.minutes}
-                  onChange={(e) => handleChange(index, "minutes", e.target.value)}
-                  className="border rounded-lg px-3 py-2"
-                />
-  
-                <input
-                  type="number"
-                  min={1}
-                  value={item.days}
-                  onChange={(e) => handleChange(index, "days", e.target.value)}
-                  className="border rounded-lg px-3 py-2"
-                />
-  
-                <select
-                  value={item.type}
-                  onChange={(e) => handleChange(index, "type", e.target.value)}
-                  className="border rounded-lg px-2 py-2 cursor-pointer"
-                >
-                  <option value="add">+</option>
-                  <option value="minus">−</option>
-                </select>
-  
-                <button
-                  onClick={() => removeRow(index)}
-                  className="text-red-500 hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-  
-            <button
-              onClick={addRow}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
+      <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
+        <div className="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6">
+          <h1 className="text-2xl font-semibold text-center mb-6">
+            Time Calculator
+          </h1>
+
+          <div className="grid grid-cols-5 gap-3 mb-3 font-medium">
+            <p>Hours</p>
+            <p>Minutes</p>
+            <p>Days</p>
+            <p>Type</p>
+            <p></p>
+          </div>
+
+          {entries.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-5 gap-3 items-center mb-3"
             >
-              + Add Time
-            </button>
-  
-            <div className="mt-6 bg-gray-50 p-4 rounded-lg">
-              <h2 className="text-lg font-semibold mb-2">Total Time</h2>
-              <p className="text-xl">
-                {totalHours} hours {remainingMinutes} minutes
-              </p>
+              <input
+                type="number"
+                min={0}
+                value={item.hours}
+                onChange={(e) => handleChange(index, "hours", e.target.value)}
+                className="border-2 border-gray-400 rounded-lg px-3 py-2"
+              />
+
+              <input
+                type="number"
+                min={0}
+                value={item.minutes}
+                onChange={(e) => handleChange(index, "minutes", e.target.value)}
+                className="border-2 border-gray-400 rounded-lg px-3 py-2"
+              />
+
+              <input
+                type="number"
+                min={1}
+                value={item.days}
+                onChange={(e) => handleChange(index, "days", e.target.value)}
+                className="border-2 border-gray-400 rounded-lg px-3 py-2"
+              />
+
+              <select
+                value={item.type}
+                onChange={(e) => handleChange(index, "type", e.target.value)}
+                className="border-2 border-gray-400 rounded-lg px-2 py-2 cursor-pointer"
+              >
+                <option value="add">+</option>
+                <option value="minus">−</option>
+              </select>
+
+              <button
+                onClick={() => removeRow(index)}
+                className="text-red-500 hover:underline"
+              >
+                Remove
+              </button>
             </div>
+          ))}
+
+          <button
+            onClick={addRow}
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
+          >
+            + Add Time
+          </button>
+
+          <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+            <h2 className="text-lg font-semibold mb-2">Total Time</h2>
+            <p className="text-xl">
+              {totalHours} hours {remainingMinutes} minutes
+            </p>
           </div>
         </div>
-
+      </div>
     </>
   );
 }
