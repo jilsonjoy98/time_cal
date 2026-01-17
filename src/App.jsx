@@ -82,7 +82,7 @@ function App() {
               <select
                 value={item.type}
                 onChange={(e) => handleChange(index, "type", e.target.value)}
-                className="border rounded-lg px-2 py-2"
+                className="border rounded-lg px-2 py-2 cursor-pointer"
               >
                 <option value="add">+</option>
                 <option value="minus">−</option>
@@ -99,7 +99,7 @@ function App() {
 
           <button
             onClick={addRow}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer"
           >
             + Add Time
           </button>
