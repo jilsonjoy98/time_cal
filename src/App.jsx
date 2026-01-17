@@ -57,7 +57,7 @@ function App() {
     <>
       <Analytics />
 
-      <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
+      <div className="min-h-screen bg-gray-100 flex items-start justify-center sm:justify-center sm:items-center p-4">
         <div className="bg-white w-full max-w-3xl rounded-xl shadow-lg p-6">
           <h1 className="text-2xl font-semibold text-center mb-6">
             Time Calculator
