@@ -1,13 +1,31 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/clock.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Time Calculator</title>
+    <title>Time Calculator – Add & Subtract Hours, Minutes & Days</title>
+    <meta
+      name="description"
+      content="Free online time calculator to easily add or subtract hours, minutes, and days. Perfect for work schedules, timesheets, and planning."
+    />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SD4JVEVFZQ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-SD4JVEVFZQ");
+    </script>
   </body>
 </html>
