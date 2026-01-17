@@ -39,6 +39,17 @@ function App() {
           </h1>
 
           <div className="space-y-4">
+            <div className="grid grid-cols-4">
+              <div>
+                <p>Hour</p>
+              </div>
+              <div>
+                <p>Minute </p>
+              </div>
+              <div>
+                <p>Days</p>
+              </div>
+            </div>
             {entries.map((item, index) => (
               <div key={index} className="grid grid-cols-4 gap-3 items-center">
                 <input
@@ -46,7 +57,9 @@ function App() {
                   placeholder="Hours"
                   value={item.hours}
                   onChange={(e) => handleChange(index, "hours", e.target.value)}
-                  className="border rounded-lg px-3 py-2"
+                  className="border rounded-lg px-3 py-2 "
+                  min={0}
+                  maxLength={2}
                 />
 
                 <input
@@ -57,6 +70,7 @@ function App() {
                     handleChange(index, "minutes", e.target.value)
                   }
                   className="border rounded-lg px-3 py-2"
+                  min={0}
                 />
 
                 <input
@@ -65,6 +79,7 @@ function App() {
                   value={item.days}
                   onChange={(e) => handleChange(index, "days", e.target.value)}
                   className="border rounded-lg px-3 py-2"
+                  min={1}
                 />
 
                 <button
