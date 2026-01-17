@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
 function App() {
-  const [entries, setEntries] = useState([{ hours: 0, minutes: 0, days: 1 }]);
+  const [entries, setEntries] = useState([
+    { hours: 0, minutes: 0, days: 1, type: "add" },
+  ]);
 
   const handleChange = (index, field, value) => {
     const updated = [...entries];
-    updated[index][field] = Number(value);
+    updated[index][field] = field === "type" ? value : Number(value);
     setEntries(updated);
   };
 
   const addRow = () => {
-    setEntries([...entries, { hours: 0, minutes: 0, days: 1 }]);
+    setEntries([...entries, { hours: 0, minutes: 0, days: 1, type: "add" }]);
   };
 
   const removeRow = (index) => {
@@ -21,13 +23,15 @@ function App() {
   const getTotalMinutes = () => {
     return entries.reduce((total, item) => {
       const minutesPerDay = item.hours * 60 + item.minutes;
-      return total + minutesPerDay * item.days;
+      const rowTotal = minutesPerDay * item.days;
+
+      return item.type === "minus" ? total - rowTotal : total + rowTotal;
     }, 0);
   };
 
-  const totalMinutes = getTotalMinutes();
-  const totalHours = Math.floor(totalMinutes / 60);
-  const remainingMinutes = totalMinutes % 60;
+  const safeMinutes = Math.max(0, getTotalMinutes());
+  const totalHours = Math.floor(safeMinutes / 60);
+  const remainingMinutes = safeMinutes % 60;
 
   return (
     <>
@@ -38,59 +42,60 @@ function App() {
             Time Calculator
           </h1>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-4">
-              <div>
-                <p>Hour</p>
-              </div>
-              <div>
-                <p>Minute </p>
-              </div>
-              <div>
-                <p>Days</p>
-              </div>
-            </div>
-            {entries.map((item, index) => (
-              <div key={index} className="grid grid-cols-4 gap-3 items-center">
-                <input
-                  type="number"
-                  placeholder="Hours"
-                  value={item.hours}
-                  onChange={(e) => handleChange(index, "hours", e.target.value)}
-                  className="border rounded-lg px-3 py-2 "
-                  min={0}
-                  maxLength={2}
-                />
-
-                <input
-                  type="number"
-                  placeholder="Minutes"
-                  value={item.minutes}
-                  onChange={(e) =>
-                    handleChange(index, "minutes", e.target.value)
-                  }
-                  className="border rounded-lg px-3 py-2"
-                  min={0}
-                />
-
-                <input
-                  type="number"
-                  placeholder="Days"
-                  value={item.days}
-                  onChange={(e) => handleChange(index, "days", e.target.value)}
-                  className="border rounded-lg px-3 py-2"
-                  min={1}
-                />
-
-                <button
-                  onClick={() => removeRow(index)}
-                  className="text-red-500 font-medium hover:underline"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+          <div className="grid grid-cols-5 gap-3 mb-3 font-medium">
+            <p>Hours</p>
+            <p>Minutes</p>
+            <p>Days</p>
+            <p>Type</p>
+            <p></p>
           </div>
+
+          {entries.map((item, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-5 gap-3 items-center mb-3"
+            >
+              <input
+                type="number"
+                min={0}
+                value={item.hours}
+                onChange={(e) => handleChange(index, "hours", e.target.value)}
+                className="border rounded-lg px-3 py-2"
+              />
+
+              <input
+                type="number"
+                min={0}
+                value={item.minutes}
+                onChange={(e) => handleChange(index, "minutes", e.target.value)}
+                className="border rounded-lg px-3 py-2"
+              />
+
+              <input
+                type="number"
+                min={1}
+                value={item.days}
+                onChange={(e) => handleChange(index, "days", e.target.value)}
+                className="border rounded-lg px-3 py-2"
+              />
+
+              <select
+                value={item.type}
+                onChange={(e) => handleChange(index, "type", e.target.value)}
+                className="border rounded-lg px-2 py-2"
+              >
+                <option value="add">+</option>
+                <option value="minus">−</option>
+              </select>
+
+              <button
+                onClick={() => removeRow(index)}
+                className="text-red-500 hover:underline"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
 
           <button
             onClick={addRow}
